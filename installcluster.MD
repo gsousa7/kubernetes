@@ -126,8 +126,8 @@ Executar o output do comando anterior.
 [containerd releases](https://github.com/containerd/containerd/releases/)\
 [runc doc](https://github.com/opencontainers/runc/)\
 [runc releases](https://github.com/opencontainers/runc/releases/)\
-[CNI doc](https://github.com/containernetworking/plugins/)
-[CNI releases](https://github.com/containernetworking/plugins/releases/)
+[CNI doc](https://github.com/containernetworking/plugins/)\
+[CNI releases](https://github.com/containernetworking/plugins/releases/)\
 [Calico](https://docs.tigera.io/calico/latest/getting-started/kubernetes/quickstart)
 
 ## Ajudas:
