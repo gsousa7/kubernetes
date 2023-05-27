@@ -9,7 +9,8 @@ Configurar firewalld de acordo a necessidade\
 Garantir que swap ta desligado e comentado em /etc/fstab:\
 `swapoff -a`
 
-# Container Runtime
+
+# Container Runtime - todos os nodes
 ## Pré requisitos
 Carregar modulos e configurar sysctl:
 ```
@@ -42,14 +43,14 @@ sudo sysctl net.bridge.bridge-nf-call-iptables net.bridge.bridge-nf-call-ip6tabl
 
 Fazer download do containerd, serviço systemd e runc, extrair, carregar serviço, iniciar e enable no boot
 ```
-sudo wget https://github.com/containerd/containerd/releases/ -P /tmp/
+sudo wget https://github.com/containerd/containerd/releases/download/v1.7.1/containerd-1.7.1-linux-amd64.tar.gz -P /tmp/
 sudo tar Cxzvf /usr/local /tmp/containerd*
 sudo wget https://raw.githubusercontent.com/containerd/containerd/main/containerd.service -P /etc/systemd/system/
 sudo systemctl daemon-reload
 sudo systemctl enable --now containerd
-sudo wget https://github.com/opencontainers/runc/releases/ -P /tmp/
+sudo wget https://github.com/opencontainers/runc/releases/download/v1.1.7/runc.amd64 -P /tmp/
 sudo install -m 755 /tmp/runc.amd64 /usr/local/sbin/runc
-sudo wget https://github.com/containernetworking/plugins/releases/download/ -P /tmp/
+sudo wget https://github.com/containernetworking/plugins/releases/download/v1.3.0/cni-plugins-linux-amd64-v1.3.0.tgz -P /tmp/
 sudo mkdir -p /opt/cni/bin
 sudo tar Cxzvf /opt/cni/bin /tmp/cni-plugins-linux-amd64*
 ```
@@ -62,7 +63,8 @@ sudo vi /etc/containerd/config.toml
 sudo systemctl restart containerd
 ```
 
-# Kubernetes cluster
+
+# Kubernetes cluster - apenas em control plane
 Configurar repositorio de kubernetes
 ```
 sudo cat <<EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
@@ -87,7 +89,7 @@ Reboot
 reboot
 ```
 
-No control plane, criar a rede de pods:
+Criar a rede de pods:
 ```
 kubeadm init --pod-network-cidr 10.10.0.0/16 --kubernetes-version 1.26.1 --node-name k8s-controlplane
 ```
@@ -99,7 +101,7 @@ sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 ```
 
-No control plane criar o pod de rede, editar custom-resources.yaml com o IP do comando `kubeadm init` e criar:
+Criar o rede dos pods com o Calico, editar custom-resources.yaml com o IP do comando `kubeadm init` e criar:
 ```
 kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.0/manifests/tigera-operator.yaml
 wget https://raw.githubusercontent.com/projectcalico/calico/v3.25.0/manifests/custom-resources.yaml
@@ -107,19 +109,28 @@ vi custom-resources.yaml
 kubectl apply -f custom-resources.yaml
 ```
 
-No control plane, obter o token para um node entrar no cluster
+Obter o token para um node entrar no cluster
 ```kubeadm token create --print-join-command```
 
-Nos worker nodes executar o output do comando anterior
+
+# Worker Nodes
+Executar o output do comando anterior.
 
 
-Refs:\
-[containerd](https://github.com/containerd/containerd/releases/download/v1.6.16/containerd-1.6.16-linux-amd64.tar.gz)\
-[containerd service](https://raw.githubusercontent.com/containerd/containerd/main/containerd.service)\
-[runc](https://github.com/opencontainers/runc/releases/download/v1.1.4/runc.amd64)\
-[CNI](https://github.com/containernetworking/plugins/releases/download/v1.2.0/cni-plugins-linux-amd64-v1.2.0.tgz)
 
-Ajudas:\
+
+---
+# Info
+## Doc de 3rd parties:
+[containerd doc](https://github.com/containerd/containerd/)\
+[containerd releases](https://github.com/containerd/containerd/releases/)\
+[runc doc](https://github.com/opencontainers/runc/)\
+[runc releases](https://github.com/opencontainers/runc/releases/)\
+[CNI doc](https://github.com/containernetworking/plugins/)
+[CNI releases](https://github.com/containernetworking/plugins/releases/)
+[Calico](https://docs.tigera.io/calico/latest/getting-started/kubernetes/quickstart)
+
+## Ajudas:
 [Ajuda completa - está em ubuntu](https://www.itsgeekhead.com/tuts/kubernetes-126-ubuntu-2204.txt)\
 [Kubernetes doc - Kubeadm](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/)\
 [Kubernetes doc - containerd](https://kubernetes.io/docs/setup/production-environment/container-runtimes/)
