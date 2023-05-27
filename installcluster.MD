@@ -45,11 +45,15 @@ Fazer download do containerd, serviço systemd e runc, extrair, carregar serviç
 ```
 sudo wget https://github.com/containerd/containerd/releases/download/v1.7.1/containerd-1.7.1-linux-amd64.tar.gz -P /tmp/
 sudo tar Cxzvf /usr/local /tmp/containerd*
+
 sudo wget https://raw.githubusercontent.com/containerd/containerd/main/containerd.service -P /etc/systemd/system/
+
 sudo systemctl daemon-reload
 sudo systemctl enable --now containerd
+
 sudo wget https://github.com/opencontainers/runc/releases/download/v1.1.7/runc.amd64 -P /tmp/
 sudo install -m 755 /tmp/runc.amd64 /usr/local/sbin/runc
+
 sudo wget https://github.com/containernetworking/plugins/releases/download/v1.3.0/cni-plugins-linux-amd64-v1.3.0.tgz -P /tmp/
 sudo mkdir -p /opt/cni/bin
 sudo tar Cxzvf /opt/cni/bin /tmp/cni-plugins-linux-amd64*
