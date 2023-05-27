@@ -67,6 +67,15 @@ sudo vi /etc/containerd/config.toml
 sudo systemctl restart containerd
 ```
 
+Terceiro e quarto comando para bravos
+```
+sudo containerd config default | sudo tee /etc/containerd/config.toml
+```
+
+Reboot
+```
+reboot
+```
 
 # Kubernetes cluster - apenas em control plane
 Configurar repositorio de kubernetes
