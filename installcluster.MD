@@ -118,3 +118,8 @@ https://github.com/containerd/containerd/releases/download/v1.6.16/containerd-1.
 https://raw.githubusercontent.com/containerd/containerd/main/containerd.service\
 https://github.com/opencontainers/runc/releases/download/v1.1.4/runc.amd64\
 https://github.com/containernetworking/plugins/releases/download/v1.2.0/cni-plugins-linux-amd64-v1.2.0.tgz
+
+Ajudas:\
+https://www.itsgeekhead.com/tuts/kubernetes-126-ubuntu-2204.txt\
+https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/\
+https://kubernetes.io/docs/setup/production-environment/container-runtimes/
